@@ -1,0 +1,74 @@
+repositories {
+    mavenCentral()
+    google()
+}
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.1.3'
+    }
+}
+
+apply plugin: "com.android.application"
+
+android {
+    compileSdkVersion 31
+    buildToolsVersion "31.0.0"
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 31
+    }
+
+    flavorDimensions "versionName"
+    productFlavors {
+        full {
+            dimension "versionName"
+        }
+        lite {
+            dimension "versionName"
+        }
+    }
+
+    sourceSets {
+        full {
+            manifest.srcFile 'src/full/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java', 'src/full/java']
+            res.srcDirs = ['src/main/res', 'src/full/res']
+        }
+        lite {
+            java.srcDirs = ['src/main/java']
+            res.srcDirs = ['src/main/res', 'src/lite/res']
+        }
+    }
+
+    if (project.properties["with_sign"]) {
+        signingConfigs {
+            release {
+                storeFile file(project.properties['keystorePath'])
+                storePassword project.properties['keystorePass']
+                keyAlias project.properties['keyAlias']
+                keyPassword project.properties['keyPass']
+            }
+        }
+
+        buildTypes {
+            release {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+}
+
+dependencies {
+    // lite version provides only map and some core services.
+    liteImplementation 'world.mappable.android:maps.mobile:1.0.1-lite'
+    // full version provides the rest of maps API routing, panoramas, search and etc.
+    fullImplementation 'world.mappable.android:maps.mobile:1.0.1-full'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
+}
