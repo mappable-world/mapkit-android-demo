@@ -1,0 +1,12 @@
+plugins {
+    id 'mapkit-samples.app'
+}
+
+android {
+    namespace 'world.mappable.mapkitdemo.placemark'
+}
+
+dependencies {
+    // Add MapKit SDK lite dependency
+    implementation "world.mappable.android:maps.mobile:${rootProject.ext.mapkitLiteVersion}"
+}

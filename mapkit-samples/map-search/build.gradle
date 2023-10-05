@@ -1,0 +1,15 @@
+plugins {
+    id 'mapkit-samples.app'
+}
+
+android {
+    namespace 'world.mappable.mapkitdemo.search'
+}
+
+dependencies {
+    implementation "androidx.fragment:fragment-ktx:${rootProject.ext.fragmentKtxVersion}"
+    implementation "androidx.recyclerview:recyclerview:${rootProject.ext.recyclerVersion}"
+
+    // Add MapKit SDK full dependency
+    implementation "world.mappable.android:maps.mobile:${rootProject.ext.mapkitFullVersion}"
+}

@@ -1,0 +1,12 @@
+plugins {
+    id 'mapkit-samples.app'
+}
+
+android {
+    namespace 'world.mappable.mapkitdemo.routing'
+}
+
+dependencies {
+    // Add MapKit SDK full dependency
+    implementation "world.mappable.android:maps.mobile:${rootProject.ext.mapkitFullVersion}"
+}
