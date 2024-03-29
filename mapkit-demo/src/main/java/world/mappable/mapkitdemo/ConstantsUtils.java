@@ -22,7 +22,7 @@ public class ConstantsUtils {
     static final Point DRIVING_ROUTE_END_LOCATION = new Point(25.101977, 55.155337);
 
     // Custom Layer
-    static final String LOGO_URL = "https://raw.githubusercontent.com/MappableWorld/mapkit-android-demo/master/src/main/res/drawable/ic_launcher.png";
+    static final String LOGO_URL = "https://raw.githubusercontent.com/MappableWorld/mapkit-android-demo/master/mapkit-demo/src/main/res/drawable/ic_launcher.png";
 
     // Masstransit
     static final Point MASSTRANSIT_POINT = new Point(25.229762, 55.289311);

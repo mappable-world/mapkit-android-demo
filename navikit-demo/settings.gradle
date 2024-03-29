@@ -1,0 +1,29 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        flatDir {
+            dirs 'libs'
+        }
+    }
+}
+
+rootProject.name = "navikit-demo"
+include ':app'
+include ':world.mappable.navikitdemo.di'
+project(':world.mappable.navikitdemo.di').projectDir = file('di')
+include ':world.mappable.navikitdemo.ui'
+project(':world.mappable.navikitdemo.ui').projectDir = file('ui')
+include ':world.mappable.navikitdemo.domain'
+project(':world.mappable.navikitdemo.domain').projectDir = file('domain')
+

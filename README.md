@@ -2,7 +2,7 @@
 
 Mappable Mapkit lets you embed interactive maps in iOS and Android mobile apps and give users access to Mappable’s technology and cartographic data. Learn more about the MapKit SDK on the [documentation](https://mappable.world/docs/mapkit/index.html?from=github-demo) page.
 
-Visit the [Getting started](https://mappable.world/docs/mapkit/android/generated/getting_started.html) page for quick start development with the MapKit SDK.
+Visit the [getting started](https://mappable.world/docs/mapkit/android/quickstart.html) page for quick start development with the MapKit SDK.
 
 The current repository contains sample code for how to use the MapKit SDK for Android applications.
 
@@ -10,19 +10,19 @@ The current repository contains sample code for how to use the MapKit SDK for An
 
 There are two Android projects in the repository:
 
-1. [__`mapkit-samples`__](mapkit-samples): Contains several Android applications with sample code in Kotlin, all of which are demonstrated in the MapKit SDK Tutorials documentation.
+1. [__```mapkit-samples```__](mapkit-samples): Contains several Android applications with sample code in Kotlin, all of which are demonstrated in the MapKit SDK Tutorials documentation.
 
-    - [`map-with-placemark`](mapkit-samples/map-with-placemark): A simple MapKit SDK application with [Getting started with MapKit for Android](https://mappable.world/docs/mapkit/android/generated/tutorials/getting_started.html) information.
+    - [```map-with-placemark```](mapkit-samples/map-with-placemark): A simple MapKit SDK application with [Map and Placemark](https://mappable.world/docs/mapkit/android/tutorials/map_with_placemark.html).
 
-    - [`map-objects`](mapkit-samples/map-objects): Using the [Map Objects](https://mappable.world/docs/mapkit/android/generated/tutorials/map_objects.html) API to add objects to the map.
+    - [```map-objects```](mapkit-samples/map-objects): Using the [Map Objects API](https://mappable.world/docs/mapkit/android/tutorials/map_objects.html) to add objects to the map.
 
-    - [`map-interaction`](mapkit-samples/map-interaction): Examples from the [Map Interaction](https://mappable.world/docs/mapkit/android/generated/tutorials/map_interaction.html) tutorial.
+    - [```map-interaction```](mapkit-samples/map-interaction): Examples from the [Map Interaction](https://mappable.world/docs/mapkit/android/tutorials/map_interaction.html) tutorial.
 
-    - [`map-search`](mapkit-samples/map-search): Examples of how to use the [Search](https://mappable.world/docs/mapkit/android/generated/tutorials/map_search.html) and [Geosuggest](https://mappable.world/docs/mapkit/android/generated/tutorials/map_suggest.html) functionality.
+    - [```map-search```](mapkit-samples/map-search): Examples of how to use the [Search](https://mappable.world/docs/mapkit/android/tutorials/map_search.html) and [Geosuggest](https://mappable.world/docs/mapkit/android/tutorials/map_suggest.html) functionality.
 
-    - [`map-routing`](mapkit-samples/map-routing): About the [Routes](https://mappable.world/docs/mapkit/android/generated/tutorials/map_routes.html) and [Routing](https://mappable.world/docs/mapkit/android/generated/tutorials/map_routing.html) API.
+    - [```map-routing```](mapkit-samples/map-routing): About the [Routes](https://mappable.world/docs/mapkit/android/tutorials/map_routes.html) and [Routing](https://mappable.world/docs/mapkit/android/tutorials/map_routing.html) API.
 
-2. [__`mapkit-demo`__](mapkit-demo): A demo application in Java that contains the basic functionality of the lite and full MapKit SDK versions. It is not supported with Tutorials documentation, unlike the `mapkit-samples` project.
+2. [__```mapkit-demo```__](mapkit-demo): A demo application in Java that contains the basic functionality of the lite and full MapKit SDK versions. It is not supported with Tutorials documentation, unlike the ```mapkit-samples``` project.
 
 ## Build locally
 
@@ -31,13 +31,13 @@ There are two Android projects in the repository:
     git clone https://github.com/mappable-world/mapkit-android-demo.git
     ```
 
-2. Demo applications use the MapKit SDK, which requires __API key__. You can get a free MapKit __API key__ in the [Get the MapKit API Key](https://mappable.world/docs/mapkit/android/generated/getting_started.html#key) documentation.
+2. Demo applications use the MapKit SDK, which requires __API key__. You can get a free MapKit __API key__ in the [Get the MapKit API Key](https://mappable.world/docs/mapkit/android/quickstart.html#key) documentation.
 
 3. Depending on the project you want to build, follow the steps in the following sections.
 
 ### mapkit-samples
 
-1. Open or create the __project's__ `local.properties` file. Add the following property with your __API key__ value in place of the `YOUR_API_KEY` placeholder:
+1. Open or create the __project's__ ```local.properties``` file. Add the following property with your __API key__ value in place of the ```YOUR_API_KEY``` placeholder:
 
     ```properties
     MAPKIT_API_KEY=YOUR_API_KEY
@@ -51,7 +51,7 @@ There are two Android projects in the repository:
 
 ### mapkit-demo
 
-1. Open the [`MainApplication.java`](mapkit-demo/src/main/java/world/mappable/mapkitdemo/MainApplication.java) and edit the `MAPKIT_API_KEY` field, setting its value with your __API key__ in place of the `your_api_key` placeholder:
+1. Open the [```MainApplication.java```](mapkit-demo/src/main/java/world/mappable/mapkitdemo/MainApplication.java) and edit the ```MAPKIT_API_KEY``` field, setting its value with your __API key__ in place of the ```your_api_key``` placeholder:
 
     ```java
     private final String MAPKIT_API_KEY = "your_api_key";

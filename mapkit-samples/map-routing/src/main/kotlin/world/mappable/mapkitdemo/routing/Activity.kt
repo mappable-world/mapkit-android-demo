@@ -13,6 +13,7 @@ import world.mappable.mapkit.directions.DirectionsFactory
 import world.mappable.mapkit.directions.driving.DrivingOptions
 import world.mappable.mapkit.directions.driving.DrivingRoute
 import world.mappable.mapkit.directions.driving.DrivingRouter
+import world.mappable.mapkit.directions.driving.DrivingRouterType
 import world.mappable.mapkit.directions.driving.DrivingSession
 import world.mappable.mapkit.directions.driving.DrivingSession.DrivingRouteListener
 import world.mappable.mapkit.directions.driving.VehicleOptions
@@ -90,7 +91,7 @@ class Activity : AppCompatActivity() {
         placemarksCollection = map.mapObjects.addCollection()
         routesCollection = map.mapObjects.addCollection()
 
-        drivingRouter = DirectionsFactory.getInstance().createDrivingRouter()
+        drivingRouter = DirectionsFactory.getInstance().createDrivingRouter(DrivingRouterType.COMBINED)
 
         findViewById<Button>(R.id.button_clear_route).setOnClickListener {
             routePoints = emptyList()

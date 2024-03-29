@@ -15,6 +15,7 @@ import world.mappable.mapkit.directions.DirectionsFactory;
 import world.mappable.mapkit.directions.driving.DrivingOptions;
 import world.mappable.mapkit.directions.driving.DrivingRoute;
 import world.mappable.mapkit.directions.driving.DrivingRouter;
+import world.mappable.mapkit.directions.driving.DrivingRouterType;
 import world.mappable.mapkit.directions.driving.DrivingSession;
 import world.mappable.mapkit.directions.driving.VehicleOptions;
 import world.mappable.mapkit.geometry.Point;
@@ -45,14 +46,13 @@ public class DrivingActivity extends Activity implements DrivingSession.DrivingR
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         DirectionsFactory.initialize(this);
-
         setContentView(R.layout.driving);
         super.onCreate(savedInstanceState);
 
         mapView = findViewById(R.id.mapview);
         mapView.getMap().move(new CameraPosition(
                 SCREEN_CENTER, 5, 0, 0));
-        drivingRouter = DirectionsFactory.getInstance().createDrivingRouter();
+        drivingRouter = DirectionsFactory.getInstance().createDrivingRouter(DrivingRouterType.COMBINED);
         mapObjects = mapView.getMap().getMapObjects().addCollection();
 
         submitRequest();
@@ -101,7 +101,7 @@ public class DrivingActivity extends Activity implements DrivingSession.DrivingR
                 null,
                 null));
         requestPoints.add(new RequestPoint(
-                DRIVING_ROUTE_START_LOCATION,
+                DRIVING_ROUTE_END_LOCATION,
                 RequestPointType.WAYPOINT,
                 null,
                 null));

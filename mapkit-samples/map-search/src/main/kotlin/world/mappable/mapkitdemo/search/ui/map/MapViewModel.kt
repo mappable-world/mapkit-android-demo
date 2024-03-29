@@ -14,6 +14,7 @@ import world.mappable.mapkit.search.Session
 import world.mappable.mapkit.search.Session.SearchListener
 import world.mappable.mapkit.search.SuggestItem
 import world.mappable.mapkit.search.SuggestOptions
+import world.mappable.mapkit.search.SuggestResponse
 import world.mappable.mapkit.search.SuggestSession
 import world.mappable.mapkit.search.SuggestType
 import world.mappable.mapkitdemo.search.data.toBoundingBox
@@ -164,8 +165,8 @@ class MapViewModel : ViewModel() {
     }
 
     private val suggestSessionListener = object : SuggestSession.SuggestListener {
-        override fun onResponse(items: List<SuggestItem>) {
-            val suggestItems = items.take(SUGGEST_NUMBER_LIMIT)
+        override fun onResponse(responce: SuggestResponse) {
+            val suggestItems = responce.items.take(SUGGEST_NUMBER_LIMIT)
                 .map {
                     SuggestHolderItem(
                         title = it.title,

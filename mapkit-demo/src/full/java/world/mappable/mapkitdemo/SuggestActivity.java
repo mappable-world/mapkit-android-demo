@@ -20,8 +20,8 @@ import world.mappable.mapkit.geometry.Point;
 import world.mappable.mapkit.search.SearchFactory;
 import world.mappable.mapkit.search.SearchManager;
 import world.mappable.mapkit.search.SearchManagerType;
-import world.mappable.mapkit.search.SuggestItem;
 import world.mappable.mapkit.search.SuggestOptions;
+import world.mappable.mapkit.search.SuggestResponse;
 import world.mappable.mapkit.search.SuggestSession;
 import world.mappable.mapkit.search.SuggestType;
 import world.mappable.runtime.Error;
@@ -96,10 +96,10 @@ public class SuggestActivity extends Activity implements SuggestSession.SuggestL
     }
 
     @Override
-    public void onResponse(@NonNull List<SuggestItem> items) {
+    public void onResponse(@NonNull SuggestResponse suggest) {
         suggestResult.clear();
-        for (int i = 0; i < Math.min(RESULT_NUMBER_LIMIT, items.size()); i++) {
-            suggestResult.add(items.get(i).getDisplayText());
+        for (int i = 0; i < Math.min(RESULT_NUMBER_LIMIT, suggest.getItems().size()); i++) {
+            suggestResult.add(suggest.getItems().get(i).getDisplayText());
         }
         resultAdapter.notifyDataSetChanged();
         suggestResultView.setVisibility(View.VISIBLE);
