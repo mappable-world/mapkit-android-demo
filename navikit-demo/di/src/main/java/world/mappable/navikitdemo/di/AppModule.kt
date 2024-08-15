@@ -3,28 +3,38 @@ package world.mappable.navikitdemo.di
 import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
+import world.mappable.navikitdemo.data.AnnotationsManagerImpl
 import world.mappable.navikitdemo.data.LocationManagerImpl
+import world.mappable.navikitdemo.data.NavigationHolderImpl
 import world.mappable.navikitdemo.data.NavigationManagerImpl
 import world.mappable.navikitdemo.data.NavigationStyleManagerImpl
 import world.mappable.navikitdemo.data.RequestPointsManagerImpl
 import world.mappable.navikitdemo.data.SettingsManagerImpl
 import world.mappable.navikitdemo.data.SimulationManagerImpl
+import world.mappable.navikitdemo.data.SpeakerImpl
 import world.mappable.navikitdemo.data.VehicleOptionsManagerImpl
 import world.mappable.navikitdemo.data.helpers.BackgroundServiceManagerImpl
 import world.mappable.navikitdemo.data.helpers.KeyValueStorageImpl
+import world.mappable.navikitdemo.data.helpers.NavigationDeserializerImpl
 import world.mappable.navikitdemo.data.helpers.NavigationFactoryImpl
 import world.mappable.navikitdemo.data.helpers.NavigationSuspenderManagerImpl
+import world.mappable.navikitdemo.data.helpers.SettingsBinderManagerImpl
+import world.mappable.navikitdemo.domain.AnnotationsManager
 import world.mappable.navikitdemo.domain.LocationManager
+import world.mappable.navikitdemo.domain.NavigationHolder
 import world.mappable.navikitdemo.domain.NavigationManager
 import world.mappable.navikitdemo.domain.NavigationStyleManager
 import world.mappable.navikitdemo.domain.RequestPointsManager
 import world.mappable.navikitdemo.domain.SettingsManager
 import world.mappable.navikitdemo.domain.SimulationManager
+import world.mappable.navikitdemo.domain.SpeakerManager
 import world.mappable.navikitdemo.domain.VehicleOptionsManager
 import world.mappable.navikitdemo.domain.helpers.BackgroundServiceManager
 import world.mappable.navikitdemo.domain.helpers.KeyValueStorage
+import world.mappable.navikitdemo.domain.helpers.NavigationDeserializer
 import world.mappable.navikitdemo.domain.helpers.NavigationFactory
 import world.mappable.navikitdemo.domain.helpers.NavigationSuspenderManager
+import world.mappable.navikitdemo.domain.helpers.SettingsBinderManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -68,6 +78,18 @@ abstract class AppModule {
 
     @Binds
     abstract fun navigationSuspenderManger(impl: NavigationSuspenderManagerImpl): NavigationSuspenderManager
+
+    @Binds
+    abstract fun navigationDeserializer(impl: NavigationDeserializerImpl): NavigationDeserializer
+
+    @Binds
+    abstract fun navigationHolder(impl: NavigationHolderImpl): NavigationHolder
+
+    @Binds
+    abstract fun speakerManager(impl: SpeakerImpl): SpeakerManager
+
+    @Binds
+    abstract fun annotationsManager(impl: AnnotationsManagerImpl): AnnotationsManager
 
     companion object {
         @Singleton

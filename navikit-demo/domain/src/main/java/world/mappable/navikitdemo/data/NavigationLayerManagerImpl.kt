@@ -3,7 +3,6 @@ package world.mappable.navikitdemo.data
 import world.mappable.mapkit.ScreenRect
 import world.mappable.mapkit.directions.driving.DrivingRoute
 import world.mappable.mapkit.map.MapWindow
-import world.mappable.mapkit.navigation.automotive.Navigation
 import world.mappable.mapkit.navigation.automotive.layer.BalloonView
 import world.mappable.mapkit.navigation.automotive.layer.BalloonViewListener
 import world.mappable.mapkit.navigation.automotive.layer.NavigationLayer
@@ -15,6 +14,7 @@ import world.mappable.mapkit.navigation.automotive.layer.RoutesSource
 import world.mappable.mapkit.navigation.guidance_camera.CameraListener
 import world.mappable.mapkit.navigation.guidance_camera.CameraMode
 import world.mappable.mapkit.road_events_layer.RoadEventsLayer
+import world.mappable.navikitdemo.domain.NavigationHolder
 import world.mappable.navikitdemo.domain.NavigationLayerManager
 import world.mappable.navikitdemo.domain.NavigationStyleManager
 import world.mappable.navikitdemo.domain.SettingsManager
@@ -29,7 +29,7 @@ class NavigationLayerManagerImpl @Inject constructor(
     private val mapWindow: MapWindow,
     private val roadEventsLayer: RoadEventsLayer,
     private val navigationStyleManager: NavigationStyleManager,
-    private val navigation: Navigation,
+    private val navigationHolder: NavigationHolder,
     private val settings: SettingsManager,
 ) : NavigationLayerManager {
 
@@ -110,18 +110,14 @@ class NavigationLayerManagerImpl @Inject constructor(
     override fun initIfNeeded() {
         if (isInited) return
         isInited = true
-        subscribeForNavigationEvents()
+        navigationLayer.addAllListeners()
     }
 
     override fun recreateNavigationLayer() {
-        navigationLayer.apply {
-            removeRouteViewListener(routeViewListener)
-            removeBalloonViewListener(balloonViewListener)
-            camera.removeListener(cameraListener)
-            removeFromMap()
-        }
+        navigationLayer.removeAllListeners()
+        navigationLayer.removeFromMap()
         navigationLayer = createLayer()
-        subscribeForNavigationEvents()
+        navigationLayer.addAllListeners()
 
         navigationStyleManager.apply {
             currentJamsMode = settings.jamsMode.value
@@ -167,16 +163,21 @@ class NavigationLayerManagerImpl @Inject constructor(
 
     private fun createLayer(): NavigationLayer {
         return NavigationLayerFactory.createNavigationLayer(
-            mapWindow, roadEventsLayer, navigationStyleManager, navigation
+            mapWindow, roadEventsLayer, navigationStyleManager, navigationHolder.navigation.value
         )
     }
 
-    private fun subscribeForNavigationEvents() {
-        navigationLayer.apply {
-            addRouteViewListener(routeViewListener)
-            addBalloonViewListener(balloonViewListener)
-            addListener(navigationLayerListener)
-            camera.addListener(cameraListener)
-        }
+    private fun NavigationLayer.addAllListeners() {
+        addRouteViewListener(routeViewListener)
+        addBalloonViewListener(balloonViewListener)
+        addListener(navigationLayerListener)
+        camera.addListener(cameraListener)
+    }
+
+    private fun NavigationLayer.removeAllListeners() {
+        camera.removeListener(cameraListener)
+        removeListener(navigationLayerListener)
+        removeBalloonViewListener(balloonViewListener)
+        removeRouteViewListener(routeViewListener)
     }
 }

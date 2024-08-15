@@ -5,19 +5,25 @@ import world.mappable.mapkit.directions.driving.DrivingRoute
 import world.mappable.mapkit.location.LocationSimulator
 import world.mappable.mapkit.location.LocationSimulatorListener
 import world.mappable.mapkit.location.SimulationAccuracy
+import world.mappable.navikitdemo.domain.SettingsManager
 import world.mappable.navikitdemo.domain.SimulationManager
+import world.mappable.navikitdemo.domain.utils.toMetersPerSecond
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val DEFAULT_SIMULATION_SPEED = 20.0
+const val DEFAULT_SIMULATION_SPEED = 72.0 // km / h
+const val MAX_SIMULATION_SPEED = 160.0f // km / h
+const val MIN_SIMULATION_SPEED = 0.0f // km / h
 
 @Singleton
-class SimulationManagerImpl @Inject constructor() : SimulationManager {
+class SimulationManagerImpl @Inject constructor(
+    settingsManager: SettingsManager,
+) : SimulationManager {
 
     private var locationSimulator: LocationSimulator? = null
-    private var simulationSpeed = DEFAULT_SIMULATION_SPEED
+    private var simulationSpeed = settingsManager.simulationSpeed.value.toDouble().toMetersPerSecond()
 
     private var locationSimulatorListener = LocationSimulatorListener {}
 
@@ -57,7 +63,7 @@ class SimulationManagerImpl @Inject constructor() : SimulationManager {
     }
 
     override fun setSimulationSpeed(speed: Double) {
-        simulationSpeed = speed
+        simulationSpeed = speed.toMetersPerSecond()
         locationSimulator?.speed = simulationSpeed
     }
 }

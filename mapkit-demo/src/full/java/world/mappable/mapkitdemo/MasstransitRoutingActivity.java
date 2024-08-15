@@ -12,7 +12,6 @@ import world.mappable.mapkit.Animation;
 import world.mappable.mapkit.MapKitFactory;
 import world.mappable.mapkit.RequestPoint;
 import world.mappable.mapkit.RequestPointType;
-import world.mappable.mapkit.geometry.Point;
 import world.mappable.mapkit.geometry.Polyline;
 import world.mappable.mapkit.geometry.SubpolylineHelper;
 import world.mappable.mapkit.map.CameraPosition;
@@ -50,28 +49,28 @@ public class MasstransitRoutingActivity extends Activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        TransportFactory.initialize(this);
         setContentView(R.layout.map);
         super.onCreate(savedInstanceState);
         mapView = (MapView)findViewById(R.id.mapview);
 
         // And to show what can be done with it, we move the camera to the center of the target location.
-        mapView.getMap().move(
+        mapView.getMapWindow().getMap().move(
                 new CameraPosition(MASSTRANSIT_POINT, 12.0f, 0.0f, 0.0f),
                 new Animation(Animation.Type.SMOOTH, 5),
                 null);
 
-        mapObjects = mapView.getMap().getMapObjects().addCollection();
+        mapObjects = mapView.getMapWindow().getMap().getMapObjects().addCollection();
 
 
         TransitOptions options = new TransitOptions(FilterVehicleTypes.NONE.value, new TimeOptions());
+        boolean avoidSteep = false;
         List<RequestPoint> points = new ArrayList<RequestPoint>();
         points.add(new RequestPoint(
                 MASSTRANSIT_ROUTE_START_LOCATION, RequestPointType.WAYPOINT, null, null));
         points.add(new RequestPoint(
                 MASSTRANSIT_ROUTE_END_LOCATION, RequestPointType.WAYPOINT, null, null));
         mtRouter = TransportFactory.getInstance().createMasstransitRouter();
-        mtRouter.requestRoutes(points, options, this);
+        mtRouter.requestRoutes(points, options, avoidSteep, this);
     }
 
     @Override

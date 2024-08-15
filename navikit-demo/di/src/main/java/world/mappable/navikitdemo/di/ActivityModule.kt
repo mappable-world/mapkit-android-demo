@@ -1,16 +1,12 @@
 package world.mappable.navikitdemo.di
 
-import world.mappable.navikitdemo.data.AnnotationsManagerImpl
 import world.mappable.navikitdemo.data.CameraManagerImpl
 import world.mappable.navikitdemo.data.NavigationLayerManagerImpl
-import world.mappable.navikitdemo.data.SpeakerImpl
 import world.mappable.navikitdemo.data.helpers.AlertDialogFactoryImpl
 import world.mappable.navikitdemo.data.helpers.MapTapManagerImpl
 import world.mappable.navikitdemo.data.helpers.PermissionManagerImpl
 import world.mappable.navikitdemo.data.helpers.SettingsBinderManagerImpl
-import world.mappable.navikitdemo.domain.AnnotationsManager
 import world.mappable.navikitdemo.domain.NavigationLayerManager
-import world.mappable.navikitdemo.domain.SpeakerManager
 import world.mappable.navikitdemo.domain.helpers.AlertDialogFactory
 import world.mappable.navikitdemo.domain.helpers.MapTapManager
 import world.mappable.navikitdemo.domain.helpers.PermissionManager
@@ -41,10 +37,4 @@ abstract class ActivityModule {
 
     @Binds
     abstract fun settingsBinderManager(impl: SettingsBinderManagerImpl): SettingsBinderManager
-
-    @Binds
-    abstract fun speakerManager(impl: SpeakerImpl): SpeakerManager
-
-    @Binds
-    abstract fun annotationsManager(impl: AnnotationsManagerImpl): AnnotationsManager
 }

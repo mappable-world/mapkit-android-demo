@@ -4,18 +4,17 @@ import static world.mappable.mapkitdemo.ConstantsUtils.LOGO_URL;
 
 import android.app.Activity;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
 
 import world.mappable.mapkit.MapKitFactory;
-import world.mappable.mapkit.TileId;
-import world.mappable.mapkit.Version;
 import world.mappable.mapkit.layers.Layer;
 import world.mappable.mapkit.layers.LayerOptions;
 import world.mappable.mapkit.layers.TileFormat;
 import world.mappable.mapkit.map.MapType;
+import world.mappable.mapkit.map.TileDataSourceBuilder;
+import world.mappable.mapkit.map.CreateTileDataSource;
 import world.mappable.mapkit.tiles.UrlProvider;
 import world.mappable.mapkit.images.DefaultImageUrlProvider;
-import world.mappable.mapkit.geometry.geo.Projection;
-import world.mappable.mapkit.geometry.geo.Projections;
 import world.mappable.mapkit.mapview.MapView;
 
 /**
@@ -27,7 +26,6 @@ import world.mappable.mapkit.mapview.MapView;
 public class CustomLayerActivity extends Activity {
     private UrlProvider urlProvider;
     private DefaultImageUrlProvider imageUrlProvider;
-    private Projection projection;
     private MapView mapView;
 
     @Override
@@ -38,18 +36,20 @@ public class CustomLayerActivity extends Activity {
 
         urlProvider = (tileId, version, features) -> LOGO_URL;
         imageUrlProvider = new DefaultImageUrlProvider();
-        projection = Projections.getWgs84Mercator();
 
         mapView = (MapView)findViewById(R.id.mapview);
-        mapView.getMap().setMapType(MapType.NONE);
-        Layer l = mapView.getMap().addLayer(
-                "mapkit_logo",
-                TileFormat.PNG,
-                new LayerOptions(),
-                urlProvider,
-                imageUrlProvider,
-                projection);
-        l.dataSourceLayer().invalidate("0.0.0");
+        mapView.getMapWindow().getMap().setMapType(MapType.NONE);
+        mapView.getMapWindow().getMap().addTileLayer(
+            "mapkit_logo",
+            new LayerOptions().setVersionSupport(false),
+            new CreateTileDataSource() {
+                @Override
+                public void createTileDataSource(@NonNull TileDataSourceBuilder tileDataSourceBuilder) {
+                    tileDataSourceBuilder.setTileFormat(TileFormat.PNG);
+                    tileDataSourceBuilder.setTileUrlProvider(urlProvider);
+                    tileDataSourceBuilder.setImageUrlProvider(imageUrlProvider);
+                }
+        });
     }
 
     @Override
