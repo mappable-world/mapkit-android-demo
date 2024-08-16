@@ -6,10 +6,8 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
 
-import world.mappable.mapkit.Animation;
 import world.mappable.mapkit.MapKitFactory;
 import world.mappable.mapkit.map.Map;
-import world.mappable.mapkit.geometry.Point;
 import world.mappable.mapkit.map.CameraPosition;
 
 import world.mappable.mapkit.map.MapType;
@@ -34,7 +32,7 @@ public class CustomizationActivity extends Activity {
         super.onCreate(savedInstanceState);
         mapView = (MapView)findViewById(R.id.mapview);
 
-        Map map = mapView.getMap();
+        Map map = mapView.getMapWindow().getMap();
         map.setMapType(MapType.VECTOR_MAP);
 
         // Apply customization

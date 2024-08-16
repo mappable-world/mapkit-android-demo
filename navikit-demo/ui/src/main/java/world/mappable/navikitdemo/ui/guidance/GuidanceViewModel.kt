@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import world.mappable.mapkit.directions.driving.DrivingRoute
 import world.mappable.mapkit.geometry.geo.PolylineUtils
 import world.mappable.mapkit.location.Location
-import world.mappable.mapkit.navigation.automotive.Guidance
 import world.mappable.mapkit.navigation.automotive.SpeedLimitStatus
 import world.mappable.navikitdemo.domain.LocationManager
 import world.mappable.navikitdemo.domain.NavigationManager
@@ -16,6 +15,7 @@ import world.mappable.navikitdemo.domain.utils.distanceLeft
 import world.mappable.navikitdemo.domain.utils.localizeDistance
 import world.mappable.navikitdemo.domain.utils.localizeSpeed
 import world.mappable.navikitdemo.domain.utils.timeWithTraffic
+import world.mappable.navikitdemo.domain.utils.toMetersPerSecond
 import world.mappable.navikitdemo.ui.guidance.views.SpeedLimitViewState
 import world.mappable.navikitdemo.ui.guidance.views.maneuver.UpcomingManeuverViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,7 +33,6 @@ import kotlin.time.Duration.Companion.seconds
 class GuidanceViewModel @Inject constructor(
     private val navigationManager: NavigationManager,
     private val locationManager: LocationManager,
-    private val guidance: Guidance,
     private val simulationManager: SimulationManager,
     private val settingsManager: SettingsManager,
     private val backgroundServiceManager: BackgroundServiceManager,
@@ -47,7 +46,9 @@ class GuidanceViewModel @Inject constructor(
     @OptIn(FlowPreview::class)
     val guidanceFinished: Flow<Unit> = navigationManager.currentRoute
         .map { it == null }
-        .debounce(1.seconds)
+        // Set debounce to prevent a guidance screen exiting
+        // if current route will disappear for a short period of time.
+        .debounce(2.seconds)
         .filter { it }
         .map { }
 
@@ -55,9 +56,7 @@ class GuidanceViewModel @Inject constructor(
         val route = nullableRoute ?: return
         if (navigationManager.isGuidanceActive) return
         navigationManager.startGuidance(route)
-    }
 
-    fun startBackgroundGuidanceServiceIfNeeded() {
         if (settingsManager.background.value && navigationManager.isGuidanceActive) {
             backgroundServiceManager.startService()
         }
@@ -73,7 +72,7 @@ class GuidanceViewModel @Inject constructor(
             settingsManager.simulationSpeed.changes(),
             simulationManager.simulationActive,
         ) { roadName, roadFlags, location, simulationSpeed, simulationActive ->
-            val route = guidance.currentRoute
+            val route = navigationManager.currentRoute.value
             val time = route?.timeWithTraffic()?.text ?: "undefined"
             val distance = route?.distanceLeft()?.text ?: "undefined"
 
@@ -83,7 +82,7 @@ class GuidanceViewModel @Inject constructor(
                 timeLeftText = "Time: $time",
                 distanceLeftText = "Distance: $distance",
                 speedLimitViewState = location?.toSpeedLimitViewState(),
-                simulationSpeed = simulationSpeed.toDouble().localizeSpeed(),
+                simulationSpeed = simulationSpeed.toDouble().toMetersPerSecond().localizeSpeed(),
                 simulationPanelVisible = simulationActive,
             )
         }
@@ -97,8 +96,7 @@ class GuidanceViewModel @Inject constructor(
         }
 
         with(settingsManager.simulationSpeed) {
-            val newSpeed = (value + diff).coerceIn(SIMULATION_SPEED_RANGE)
-            value = newSpeed.toFloat()
+            value = (value + diff).toFloat()
         }
     }
 
@@ -140,8 +138,8 @@ class GuidanceViewModel @Inject constructor(
 
     private fun Location.toSpeedLimitViewState(): SpeedLimitViewState? {
         val currentSpeed = speed ?: return null
-        val limitSpeed = navigationManager.speedLimit()?.value ?: return null
-        val speedLimitExceeded = when (navigationManager.speedLimitStatus()) {
+        val limitSpeed = navigationManager.speedLimit?.value ?: return null
+        val speedLimitExceeded = when (navigationManager.speedLimitStatus) {
             SpeedLimitStatus.BELOW_LIMIT -> false
             SpeedLimitStatus.STRICT_LIMIT_EXCEEDED, SpeedLimitStatus.TOLERANT_LIMIT_EXCEEDED -> true
         }
@@ -149,9 +147,6 @@ class GuidanceViewModel @Inject constructor(
     }
 
     private companion object {
-        // Internal MapKit restriction for simulation speed
-        // in m/s.
-        val SIMULATION_SPEED_RANGE = 0.0..40.0
-        const val SIMULATION_SPEED_STEP = 2.0
+        const val SIMULATION_SPEED_STEP = 5.0
     }
 }

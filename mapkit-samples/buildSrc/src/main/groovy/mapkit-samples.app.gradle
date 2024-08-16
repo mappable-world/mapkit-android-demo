@@ -8,7 +8,7 @@ android {
     buildToolsVersion "33.0.0"
 
     defaultConfig {
-        minSdk 21
+        minSdk 23
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -27,6 +27,19 @@ android {
 
     buildFeatures {
         viewBinding true
+    }
+
+    buildTypes {
+        release {
+            kotlinOptions {
+                allWarningsAsErrors = true
+            }
+
+            tasks.withType(JavaCompile).configureEach {
+                options.compilerArgs += '-Xlint:all'
+                options.compilerArgs += '-Werror'
+            }
+        }
     }
 
     if (project.properties["with_sign"]) {
