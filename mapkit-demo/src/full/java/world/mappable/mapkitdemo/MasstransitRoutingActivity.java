@@ -19,14 +19,16 @@ import world.mappable.mapkit.map.MapObjectCollection;
 import world.mappable.mapkit.map.PolylineMapObject;
 import world.mappable.mapkit.mapview.MapView;
 import world.mappable.mapkit.transport.TransportFactory;
-import world.mappable.mapkit.transport.masstransit.TransitOptions;
 import world.mappable.mapkit.transport.masstransit.FilterVehicleTypes;
+import world.mappable.mapkit.transport.masstransit.FitnessOptions;
 import world.mappable.mapkit.transport.masstransit.MasstransitRouter;
 import world.mappable.mapkit.transport.masstransit.Route;
+import world.mappable.mapkit.transport.masstransit.RouteOptions;
 import world.mappable.mapkit.transport.masstransit.Section;
 import world.mappable.mapkit.transport.masstransit.SectionMetadata;
 import world.mappable.mapkit.transport.masstransit.Session;
 import world.mappable.mapkit.transport.masstransit.TimeOptions;
+import world.mappable.mapkit.transport.masstransit.TransitOptions;
 import world.mappable.mapkit.transport.masstransit.Transport;
 import world.mappable.runtime.Error;
 import world.mappable.runtime.network.NetworkError;
@@ -62,15 +64,16 @@ public class MasstransitRoutingActivity extends Activity
         mapObjects = mapView.getMapWindow().getMap().getMapObjects().addCollection();
 
 
-        TransitOptions options = new TransitOptions(FilterVehicleTypes.NONE.value, new TimeOptions());
+        TransitOptions transitOptions = new TransitOptions(FilterVehicleTypes.NONE.value, new TimeOptions());
         boolean avoidSteep = false;
+        RouteOptions routeOptions = new RouteOptions(new FitnessOptions(avoidSteep));
         List<RequestPoint> points = new ArrayList<RequestPoint>();
         points.add(new RequestPoint(
                 MASSTRANSIT_ROUTE_START_LOCATION, RequestPointType.WAYPOINT, null, null));
         points.add(new RequestPoint(
                 MASSTRANSIT_ROUTE_END_LOCATION, RequestPointType.WAYPOINT, null, null));
         mtRouter = TransportFactory.getInstance().createMasstransitRouter();
-        mtRouter.requestRoutes(points, options, avoidSteep, this);
+        mtRouter.requestRoutes(points, transitOptions, routeOptions, this);
     }
 
     @Override

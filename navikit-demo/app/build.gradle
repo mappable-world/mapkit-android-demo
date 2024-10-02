@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "world.mappable.navikitdemo"
-        minSdk 23
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -58,9 +58,9 @@ dependencies {
     implementation project(":world.mappable.navikitdemo.domain")
     implementation project(":world.mappable.navikitdemo.ui")
 
-    implementation "world.mappable.android:maps.mobile:4.7.2-navikit"
-    implementation "world.mappable.mapkit.styling:automotivenavigation:4.7.2"
-    implementation "world.mappable.mapkit.styling:roadevents:4.7.2"
+    implementation "world.mappable.android:maps.mobile:4.8.0-navikit"
+    implementation "world.mappable.mapkit.styling:automotivenavigation:4.8.0"
+    implementation "world.mappable.mapkit.styling:roadevents:4.8.0"
 
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompatVersion}"
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintlayoutVersion}"

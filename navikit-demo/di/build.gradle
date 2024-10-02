@@ -11,7 +11,7 @@ android {
     buildToolsVersion "33.0.0"
 
     defaultConfig {
-        minSdk 23
+        minSdk 26
         targetSdk 33
     }
 
@@ -29,7 +29,7 @@ dependencies {
     implementation project(":world.mappable.navikitdemo.domain")
     implementation project(":world.mappable.navikitdemo.ui")
 
-    implementation "world.mappable.android:maps.mobile:4.7.2-navikit"
+    implementation "world.mappable.android:maps.mobile:4.8.0-navikit"
 
     implementation "androidx.core:core-ktx:${rootProject.ext.coreKtxVersion}"
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompatVersion}"
