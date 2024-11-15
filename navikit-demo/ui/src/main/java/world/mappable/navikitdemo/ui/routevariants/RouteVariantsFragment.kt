@@ -12,8 +12,14 @@ import world.mappable.mapkit.geometry.Point
 import world.mappable.navikitdemo.ui.R
 import world.mappable.navikitdemo.ui.common.BaseMapFragment
 import world.mappable.navikitdemo.ui.databinding.FragmentRouteVariantsBinding
+import world.mappable.navikitdemo.ui.utils.showSnackbar
 import world.mappable.navikitdemo.ui.utils.subscribe
 import dagger.hilt.android.AndroidEntryPoint
+
+data class RouteVariantsUiState(
+    val hasRequestPoints: Boolean = false,
+    val errorMessage: String? = null,
+)
 
 @AndroidEntryPoint
 class RouteVariantsFragment : BaseMapFragment(R.layout.fragment_route_variants) {
@@ -41,12 +47,15 @@ class RouteVariantsFragment : BaseMapFragment(R.layout.fragment_route_variants) 
             buttonGo.setOnClickListener { openGuidance() }
         }
 
-        viewModel.hasRequestPoints.subscribe(viewLifecycleOwner) {
-            binding.buttonGo.isVisible = !it
-        }
-
         mapTapManager.longTapActions.subscribe(viewLifecycleOwner) {
             showRequestPointDialog(point = it)
+        }
+
+        viewModel.uiState.subscribe(viewLifecycleOwner) { uiState ->
+            binding.buttonGo.isVisible = !uiState.hasRequestPoints
+            uiState.errorMessage?.let {
+                view.showSnackbar(it) { viewModel.errorMessageShown() }
+            }
         }
     }
 

@@ -6,7 +6,9 @@ import world.mappable.mapkit.annotations.AnnotationLanguage
 import world.mappable.mapkit.directions.driving.DrivingRoute
 import world.mappable.mapkit.location.Location
 import world.mappable.mapkit.navigation.automotive.Navigation
+import world.mappable.mapkit.navigation.automotive.NavigationListener
 import world.mappable.mapkit.navigation.automotive.RouteChangeReason
+import world.mappable.mapkit.navigation.automotive.RouteOptions
 import world.mappable.mapkit.navigation.automotive.SpeedLimitStatus
 import world.mappable.mapkit.navigation.automotive.SpeedLimitsPolicy
 import world.mappable.mapkit.navigation.automotive.UpcomingLaneSign
@@ -20,7 +22,9 @@ import world.mappable.navikitdemo.domain.SimulationManager
 import world.mappable.navikitdemo.domain.VehicleOptionsManager
 import world.mappable.navikitdemo.domain.helpers.BackgroundServiceManager
 import world.mappable.navikitdemo.domain.helpers.SimpleGuidanceListener
+import world.mappable.navikitdemo.domain.models.NavigationState
 import world.mappable.navikitdemo.domain.utils.buildFlagsString
+import world.mappable.runtime.Error
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -74,6 +78,9 @@ class NavigationManagerImpl @Inject constructor(
     override val speedLimitTolerance: Double = navigation.guidance.speedLimitTolerance
     override val speedLimitsPolicy: SpeedLimitsPolicy = navigation.guidance.speedLimitsPolicy
 
+    private val navigationRouteStateImpl = MutableStateFlow<NavigationState>(NavigationState.Off)
+    override val navigationRouteState = navigationRouteStateImpl
+
     private val guidanceListener = object : SimpleGuidanceListener() {
         override fun onLocationChanged() {
             if ((System.currentTimeMillis() - lastLocationTime).seconds < LOCATION_UPDATE_TIMEOUT) return
@@ -98,6 +105,7 @@ class NavigationManagerImpl @Inject constructor(
         override fun onCurrentRouteChanged(reason: RouteChangeReason) {
             currentRouteImpl.value = navigation.guidance.currentRoute
         }
+
     }
 
     private val windshieldListener = object : WindshieldListener {
@@ -113,6 +121,32 @@ class NavigationManagerImpl @Inject constructor(
         override fun onDirectionSignChanged() = Unit
     }
 
+    private val navigationListener = object : NavigationListener {
+        override fun onRoutesRequestError(error: Error) {
+            navigationRouteStateImpl.value = NavigationState.Error
+        }
+
+        override fun onRoutesRequested(requestPoints: MutableList<RequestPoint>) {
+            navigationRouteStateImpl.value = NavigationState.Loading
+        }
+
+        override fun onAlternativesRequested(route: DrivingRoute) {
+            navigationRouteStateImpl.value = NavigationState.Loading
+        }
+
+        override fun onUriResolvingRequested(uri: String) {
+            navigationRouteStateImpl.value = NavigationState.Loading
+        }
+
+        override fun onRoutesBuilt() {
+            navigationRouteStateImpl.value = NavigationState.Success(navigation.routes)
+        }
+
+        override fun onResetRoutes() {
+            navigationRouteStateImpl.value = NavigationState.Off
+        }
+    }
+
     init {
         navigationHolder.navigation
             .onEach { recreateNavigation(it) }
@@ -125,8 +159,8 @@ class NavigationManagerImpl @Inject constructor(
         navigation.vehicleOptions = vehicleOptionsManager.vehicleOptions()
         navigation.requestRoutes(
             points,
-            navigation.guidance.location?.heading,
-            null
+            RouteOptions()
+                .setInitialAzimuth(navigation.guidance.location?.heading)
         )
     }
 
@@ -196,11 +230,13 @@ class NavigationManagerImpl @Inject constructor(
     private fun recreateNavigation(newInstance: Navigation) {
         navigation.apply {
             suspend()
+            removeListener(navigationListener)
             guidance.removeListener(guidanceListener)
             guidance.windshield.removeListener(windshieldListener)
         }
         navigation = newInstance
         navigation.apply {
+            addListener(navigationListener)
             guidance.addListener(guidanceListener)
             guidance.windshield.addListener(windshieldListener)
             resume()
