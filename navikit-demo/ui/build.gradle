@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    implementation "world.mappable.android:maps.mobile:4.9.0-navikit"
+    implementation "world.mappable.android:maps.mobile:4.10.0-navikit"
 
     implementation project(":world.mappable.navikitdemo.domain")
 

@@ -21,6 +21,7 @@ import world.mappable.mapkit.geometry.Point
 import world.mappable.mapkit.map.CameraPosition
 import world.mappable.mapkit.map.IconStyle
 import world.mappable.mapkit.map.InputListener
+import world.mappable.mapkit.map.LineStyle
 import world.mappable.mapkit.map.Map
 import world.mappable.mapkit.map.MapObjectCollection
 import world.mappable.mapkit.map.PolylineMapObject
@@ -138,11 +139,11 @@ class Activity : AppCompatActivity() {
         if (routePoints.size < 2) return
 
         val requestPoints = buildList {
-            add(RequestPoint(routePoints.first(), RequestPointType.WAYPOINT, null, null))
+            add(RequestPoint(routePoints.first(), RequestPointType.WAYPOINT, null, null, null))
             addAll(
                 routePoints.subList(1, routePoints.size - 1)
-                    .map { RequestPoint(it, RequestPointType.VIAPOINT, null, null) })
-            add(RequestPoint(routePoints.last(), RequestPointType.WAYPOINT, null, null))
+                    .map { RequestPoint(it, RequestPointType.VIAPOINT, null, null, null) })
+            add(RequestPoint(routePoints.last(), RequestPointType.WAYPOINT, null, null, null))
         }
 
         val drivingOptions = DrivingOptions()
@@ -170,17 +171,21 @@ class Activity : AppCompatActivity() {
     private fun PolylineMapObject.styleMainRoute() {
         zIndex = 10f
         setStrokeColor(ContextCompat.getColor(this@Activity, CommonColors.gray))
-        strokeWidth = 5f
-        outlineColor = ContextCompat.getColor(this@Activity, CommonColors.black)
-        outlineWidth = 3f
+        style = style.apply {
+            strokeWidth = 5f
+            outlineColor = ContextCompat.getColor(this@Activity, CommonColors.black)
+            outlineWidth = 3f
+        }
     }
 
     private fun PolylineMapObject.styleAlternativeRoute() {
         zIndex = 5f
         setStrokeColor(ContextCompat.getColor(this@Activity, CommonColors.light_blue))
-        strokeWidth = 4f
-        outlineColor = ContextCompat.getColor(this@Activity, CommonColors.black)
-        outlineWidth = 2f
+        style = style.apply {
+            strokeWidth = 4f
+            outlineColor = ContextCompat.getColor(this@Activity, CommonColors.black)
+            outlineWidth = 2f
+        }
     }
 
     companion object {
