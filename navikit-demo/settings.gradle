@@ -26,4 +26,6 @@ include ':world.mappable.navikitdemo.ui'
 project(':world.mappable.navikitdemo.ui').projectDir = file('ui')
 include ':world.mappable.navikitdemo.domain'
 project(':world.mappable.navikitdemo.domain').projectDir = file('domain')
+include(':world.mappable.navikitdemo.annotations')
+project(':world.mappable.navikitdemo.annotations').projectDir = file('annotations')
 

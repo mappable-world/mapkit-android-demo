@@ -1,17 +1,13 @@
 package world.mappable.navikitdemo.data
 
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import world.mappable.mapkit.navigation.automotive.Annotator
 import world.mappable.mapkit.navigation.automotive.AnnotatorListener
 import world.mappable.navikitdemo.domain.AnnotationsManager
 import world.mappable.navikitdemo.domain.NavigationHolder
-import world.mappable.navikitdemo.domain.SettingsManager
 import world.mappable.navikitdemo.domain.SpeakerManager
 import world.mappable.navikitdemo.domain.models.AnnotatedEventsType
 import world.mappable.navikitdemo.domain.models.AnnotatedRoadEventsType
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.launchIn
@@ -23,9 +19,7 @@ import javax.inject.Singleton
 @Singleton
 class AnnotationsManagerImpl @Inject constructor(
     navigationHolder: NavigationHolder,
-    @ApplicationContext private val context: Context,
-    private val settingsManager: SettingsManager,
-    private val speaker: SpeakerManager,
+    speakerManager: SpeakerManager,
 ) : AnnotationsManager {
 
     private val scope = MainScope() + Dispatchers.Main.immediate
@@ -51,7 +45,6 @@ class AnnotationsManagerImpl @Inject constructor(
 
     init {
         annotator.apply {
-            setSpeaker(speaker)
             addListener(annotatorListener)
         }
 
@@ -59,11 +52,7 @@ class AnnotationsManagerImpl @Inject constructor(
             .onEach { recreateAnnotator(it.guidance.annotator) }
             .launchIn(scope)
 
-        speaker.phrases()
-            .onEach {
-                tryShowAnnotationToast(it)
-            }
-            .launchIn(scope)
+        speakerManager.startIn(scope)
     }
 
     override fun setAnnotationsEnabled(isEnabled: Boolean) {
@@ -94,20 +83,12 @@ class AnnotationsManagerImpl @Inject constructor(
         return if (isEnabled) mask or event else mask and event.inv()
     }
 
-    private fun tryShowAnnotationToast(message: String) {
-        if (settingsManager.textAnnotations.value) {
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-        }
-    }
-
     private fun recreateAnnotator(otherAnnotator: Annotator) {
         annotator.apply {
             removeListener(annotatorListener)
-            setSpeaker(null)
         }
         annotator = otherAnnotator
         annotator.apply {
-            setSpeaker(speaker)
             addListener(annotatorListener)
         }
     }

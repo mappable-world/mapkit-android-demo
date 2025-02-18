@@ -14,6 +14,7 @@ import world.mappable.mapkit.logo.Padding
 import world.mappable.mapkit.logo.VerticalAlignment
 import world.mappable.mapkit.map.MapWindow
 import world.mappable.mapkit.map.SizeChangedListener
+import world.mappable.navikitdemo.data.StyleManagerImpl
 import world.mappable.navikitdemo.domain.CameraManager
 import world.mappable.navikitdemo.domain.SettingsManager
 import world.mappable.navikitdemo.domain.helpers.AlertDialogFactory
@@ -41,6 +42,9 @@ abstract class BaseMapFragment(@LayoutRes resId: Int) : Fragment(resId) {
 
     @Inject
     lateinit var alertDialogFactory: AlertDialogFactory
+
+    @Inject
+    lateinit var styleManager: StyleManagerImpl
 
     /**
      * Represents map's focus rect and point.
@@ -73,7 +77,10 @@ abstract class BaseMapFragment(@LayoutRes resId: Int) : Fragment(resId) {
             setMinusButtonClickCallback { cameraManager.changeZoomByStep(CameraManager.ZoomStep.MINUS) }
         }
 
-        cameraManager.start(viewLifecycleOwner.lifecycleScope)
+        with(viewLifecycleOwner.lifecycleScope) {
+            cameraManager.start(this)
+            styleManager.start(this)
+        }
     }
 
     /**

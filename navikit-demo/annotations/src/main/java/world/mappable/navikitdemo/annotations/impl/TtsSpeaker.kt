@@ -1,30 +1,17 @@
-package world.mappable.navikitdemo.data
+package world.mappable.navikitdemo.annotations.impl
 
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import world.mappable.mapkit.annotations.AnnotationLanguage
 import world.mappable.mapkit.annotations.LocalizedPhrase
-import world.mappable.navikitdemo.domain.SettingsManager
-import world.mappable.navikitdemo.domain.SpeakerManager
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
+import world.mappable.mapkit.annotations.Speaker
 import java.util.Locale
 import java.util.UUID
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class SpeakerImpl @Inject constructor(
-    @ApplicationContext context: Context,
-    private val settingsManager: SettingsManager,
-) : SpeakerManager {
-
-    private val scope = MainScope()
+internal class TtsSpeaker(
+    context: Context,
+    private val language: AnnotationLanguage
+) : Speaker {
 
     private var ttsInitialized = false
     private val tts = TextToSpeech(context) { status ->
@@ -33,17 +20,6 @@ class SpeakerImpl @Inject constructor(
             updateTtsLanguage()
         }
     }
-    private val phrasesImpl = MutableSharedFlow<String>()
-
-    init {
-        settingsManager.annotationLanguage.changes()
-            .onEach {
-                updateTtsLanguage()
-            }
-            .launchIn(scope)
-    }
-
-    override fun phrases(): Flow<String> = phrasesImpl
 
     override fun reset() {
         tts.stop()
@@ -51,9 +27,6 @@ class SpeakerImpl @Inject constructor(
 
     override fun say(phrase: LocalizedPhrase) {
         tts.speak(phrase.text, TextToSpeech.QUEUE_FLUSH, null, UUID.randomUUID().toString())
-        scope.launch {
-            phrasesImpl.emit(phrase.text)
-        }
     }
 
     override fun duration(phrase: LocalizedPhrase): Double {
@@ -62,7 +35,6 @@ class SpeakerImpl @Inject constructor(
     }
 
     private fun updateTtsLanguage() {
-        val language = settingsManager.annotationLanguage.value
         tts.language = language.toLocale()
     }
 

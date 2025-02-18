@@ -17,15 +17,13 @@ import world.mappable.navikitdemo.data.NavigationStyleManagerImpl
 import world.mappable.navikitdemo.data.RequestPointsManagerImpl
 import world.mappable.navikitdemo.data.SettingsManagerImpl
 import world.mappable.navikitdemo.data.SimulationManagerImpl
-import world.mappable.navikitdemo.data.smartroute.SmartRouteSearchFactoryImpl
-import world.mappable.navikitdemo.data.SpeakerImpl
+import world.mappable.navikitdemo.data.SpeakerManagerImpl
 import world.mappable.navikitdemo.data.VehicleOptionsManagerImpl
 import world.mappable.navikitdemo.data.helpers.BackgroundServiceManagerImpl
 import world.mappable.navikitdemo.data.helpers.KeyValueStorageImpl
 import world.mappable.navikitdemo.data.helpers.NavigationDeserializerImpl
 import world.mappable.navikitdemo.data.helpers.NavigationFactoryImpl
 import world.mappable.navikitdemo.data.helpers.NavigationSuspenderManagerImpl
-import world.mappable.navikitdemo.data.smartroute.SimpleSmartRoutePlanningFactoryImpl
 import world.mappable.navikitdemo.data.smartroute.SmartRoutePlanningFactoryImpl
 import world.mappable.navikitdemo.domain.AnnotationsManager
 import world.mappable.navikitdemo.domain.LocationManager
@@ -97,10 +95,10 @@ abstract class AppModule {
     abstract fun navigationHolder(impl: NavigationHolderImpl): NavigationHolder
 
     @Binds
-    abstract fun speakerManager(impl: SpeakerImpl): SpeakerManager
+    abstract fun annotationsManager(impl: AnnotationsManagerImpl): AnnotationsManager
 
     @Binds
-    abstract fun annotationsManager(impl: AnnotationsManagerImpl): AnnotationsManager
+    abstract fun speakerManager(impl: SpeakerManagerImpl): SpeakerManager
 
     companion object {
 
