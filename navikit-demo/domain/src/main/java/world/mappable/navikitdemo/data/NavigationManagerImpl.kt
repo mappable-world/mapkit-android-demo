@@ -3,6 +3,7 @@ package world.mappable.navikitdemo.data
 import world.mappable.mapkit.LocalizedValue
 import world.mappable.mapkit.RequestPoint
 import world.mappable.mapkit.annotations.AnnotationLanguage
+import world.mappable.mapkit.directions.driving.AvoidanceFlags
 import world.mappable.mapkit.directions.driving.DrivingRoute
 import world.mappable.mapkit.location.Location
 import world.mappable.mapkit.navigation.automotive.Navigation
@@ -219,16 +220,8 @@ class NavigationManagerImpl @Inject constructor(
         navigation.guidance.speedLimitTolerance = tolerance
     }
 
-    override fun setAvoidTolls(isAvoid: Boolean) {
-        navigation.isAvoidTolls = isAvoid
-    }
-
-    override fun setAvoidUnpaved(isAvoid: Boolean) {
-        navigation.isAvoidUnpaved = isAvoid
-    }
-
-    override fun setAvoidPoorConditions(isAvoid: Boolean) {
-        navigation.isAvoidPoorConditions = isAvoid
+    override fun setAvoidanceFlags(flags: AvoidanceFlags) {
+        navigation.avoidanceFlags = flags
     }
 
     private fun recreateNavigation(newInstance: Navigation) {

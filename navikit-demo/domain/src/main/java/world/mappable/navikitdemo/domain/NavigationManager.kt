@@ -3,6 +3,7 @@ package world.mappable.navikitdemo.domain
 import world.mappable.mapkit.LocalizedValue
 import world.mappable.mapkit.RequestPoint
 import world.mappable.mapkit.annotations.AnnotationLanguage
+import world.mappable.mapkit.directions.driving.AvoidanceFlags
 import world.mappable.mapkit.directions.driving.DrivingRoute
 import world.mappable.mapkit.navigation.automotive.SpeedLimitStatus
 import world.mappable.mapkit.navigation.automotive.SpeedLimitsPolicy
@@ -37,9 +38,7 @@ interface NavigationManager : LocationManager {
     fun setAnnotationLanguage(language: AnnotationLanguage)
     fun setEnabledAlternatives(isEnabled: Boolean)
     fun setSpeedLimitTolerance(tolerance: Double)
-    fun setAvoidTolls(isAvoid: Boolean)
-    fun setAvoidUnpaved(isAvoid: Boolean)
-    fun setAvoidPoorConditions(isAvoid: Boolean)
+    fun setAvoidanceFlags(flags: AvoidanceFlags)
 }
 
 val NavigationManager.isGuidanceActive: Boolean
