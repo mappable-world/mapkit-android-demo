@@ -58,9 +58,9 @@ dependencies {
     implementation project(":world.mappable.navikitdemo.domain")
     implementation project(":world.mappable.navikitdemo.ui")
 
-    implementation "world.mappable.android:maps.mobile:4.14.0-navikit"
-    implementation "world.mappable.mapkit.styling:automotivenavigation:4.14.0"
-    implementation "world.mappable.mapkit.styling:roadevents:4.14.0"
+    implementation "world.mappable.android:maps.mobile:4.14.1-navikit"
+    implementation "world.mappable.mapkit.styling:automotivenavigation:4.14.1"
+    implementation "world.mappable.mapkit.styling:roadevents:4.14.1"
 
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompatVersion}"
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.ext.constraintlayoutVersion}"
