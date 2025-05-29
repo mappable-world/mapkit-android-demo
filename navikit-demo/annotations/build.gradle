@@ -24,6 +24,6 @@ android {
 }
 
 dependencies {
-    implementation "world.mappable.android:maps.mobile:4.15.0-navikit"
+    implementation "world.mappable.android:maps.mobile:4.16.0-navikit"
     implementation "androidx.media3:media3-exoplayer:${rootProject.ext.exoPlayerVersion}"
 }
