@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace 'world.mappable.navikitdemo.domain'
+    namespace 'world.mappable.navikitdemo.di'
     compileSdk 35
     buildToolsVersion "35.0.0"
 
@@ -30,13 +30,14 @@ android {
 }
 
 dependencies {
-    implementation "world.mappable.android:maps.mobile:4.19.0-navikit"
+    implementation project(":world.mappable.navikitdemo.domain")
+    implementation project(":world.mappable.navikitdemo.ui")
+
+    implementation "world.mappable.maps:maps.mobile@aar"
 
     implementation "androidx.core:core-ktx:${rootProject.ext.coreKtxVersion}"
     implementation "androidx.appcompat:appcompat:${rootProject.ext.appcompatVersion}"
 
     implementation "com.google.dagger:hilt-android:${rootProject.ext.hiltVersion}"
-    implementation project(':world.mappable.navikitdemo.annotations')
     kapt "com.google.dagger:hilt-compiler:${rootProject.ext.hiltVersion}"
 }
-
