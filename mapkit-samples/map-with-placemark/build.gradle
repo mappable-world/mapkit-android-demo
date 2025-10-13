@@ -4,9 +4,6 @@ plugins {
 
 android {
     namespace 'world.mappable.mapkitdemo.placemark'
-    buildFeatures {
-        buildConfig true
-    }
 }
 
 dependencies {

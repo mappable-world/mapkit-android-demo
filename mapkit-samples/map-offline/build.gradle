@@ -5,9 +5,6 @@ plugins {
 
 android {
     namespace 'world.mappable.mapkitdemo.offline'
-    buildFeatures {
-        buildConfig true
-    }
 }
 
 dependencies {
