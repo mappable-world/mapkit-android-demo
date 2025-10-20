@@ -4,6 +4,9 @@ plugins {
 
 android {
     namespace 'world.mappable.mapkitdemo.objects'
+    buildFeatures {
+        buildConfig true
+    }
 }
 
 dependencies {
